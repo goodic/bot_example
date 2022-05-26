@@ -30,9 +30,17 @@ def save_user(user_data, conn):
     else:
         age = 0
     update_time = date.today()
-    query = f"""insert into users(id, name, city, sex, profile, age, update_time) 
-                values ({id}, '{name}', {city}, {sex}, '{profile}', {age}, '{update_time}') 
+    query = f"""insert into users(id, name, city, sex, profile, age, last_seen, update_time) 
+                values ({id}, '{name}', {city}, {sex}, '{profile}', {age}, 0, '{update_time}') 
                 ON CONFLICT (id) DO NOTHING"""
+    cur = conn.cursor()
+    cur.execute(query)
+    conn.commit()
+
+
+def save_last_seen(id, position, conn):
+    query = f"""update users set last_seen = {position}
+                where id = {id}"""
     cur = conn.cursor()
     cur.execute(query)
     conn.commit()

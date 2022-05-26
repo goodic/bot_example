@@ -61,13 +61,15 @@ for event in glongpool.listen():
             udata = get_user_bio(id)[0]
             save_user(udata, conn)
             if msg == "hi":
-                show_kbd(id, "Hi friend!")
+                show_kbd(id, "Нажмите 'Начать' если в первый раз или 'Следующий' если уже пользовались")
             elif msg == 'начать':
                 result = search_users(udata['sex'], udata['city'], 0)
                 for user in result['items']:
                     save_user(user, conn)
                     save_pair(id, user['id'], conn)
-            elif msg == 'сохранить':
+            elif msg == 'следующий':
+                pass
+            elif msg == 'выключить':
                 exit()
             else:
                 show_kbd(id)

@@ -44,3 +44,24 @@ def get_user(id, conn):
     cur.execute(query)
     result = cur.fetchone()
     return result
+
+
+def get_pair_position_max(userid, conn):
+    query = f"select max(position) from pairs where userid = {userid}"
+    cur = conn.cursor()
+    cur.execute(query)
+    result = cur.fetchone()
+    if result[0] is None:
+        return 0
+    else:
+        return int(result[0])
+
+
+def save_pair(userid, pairid, conn):
+    position = get_pair_position_max(userid, conn) + 1
+    query = f"""insert into pairs(userid, pairid, position, saved)
+                values ({userid}, {pairid}, {position}, False)
+                ON CONFLICT (userid, pairid) DO NOTHING"""
+    cur = conn.cursor()
+    cur.execute(query)
+    conn.commit()
